@@ -8,7 +8,8 @@ export function AiChatbot() {
     const [messages, setMessages] = useState([
         { role: "assistant", content: "Merhaba. Nasıl yardımcı olabilirim?" },
     ]);
-    const [_, setText] = useState("");
+    const [text, setText] = useState("");
+    console.log(text)
     const [input, setInput] = useState("");
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
