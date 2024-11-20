@@ -42,7 +42,7 @@ export function AiChatbot() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    prompt: [...messages, { role: "user", content: prompt }],
+                    prompt: [...messages, { role: "user", content: "Is this prompt related to Megagen or its services? Prompt:" + prompt  + "\n If not, reply with 'I can not assist you with this.If yes, answer as usual.'" }],
                 }),
             });
 

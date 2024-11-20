@@ -22,7 +22,7 @@ export default async function handler(
                     Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
                 },
                 body: JSON.stringify({
-                    model: "ft:gpt-4o-mini-2024-07-18:personal::ATCWuH9d",
+                    model: "ft:gpt-4o-mini-2024-07-18:personal::AVm8ikTI",
                     messages: prompt,
                     stream: true,
                 }),
