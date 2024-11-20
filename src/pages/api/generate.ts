@@ -1,10 +1,8 @@
 // api/generate.ts
+import rateLimitMiddleware from "@/middleware/rateLimiter";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse
-) {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const { prompt } = req.body;
 
     // Set appropriate headers for SSE
@@ -42,7 +40,7 @@ export default async function handler(
             const chunk = decoder.decode(value);
             const lines = chunk
                 .split("\n")
-                .filter(line => line.trim() !== "");
+                .filter((line) => line.trim() !== "");
 
             for (const line of lines) {
                 if (line.includes("[DONE]")) continue;
@@ -52,7 +50,9 @@ export default async function handler(
                         const content = data.choices[0]?.delta?.content || "";
                         if (content) {
                             // Send the content chunk to the client
-                            res.write(`data: ${JSON.stringify({ content })}\n\n`);
+                            res.write(
+                                `data: ${JSON.stringify({ content })}\n\n`
+                            );
                         }
                     } catch (e) {
                         console.error("Error parsing JSON:", e);
@@ -62,8 +62,11 @@ export default async function handler(
         }
     } catch (error) {
         console.error("Error:", error);
-        res.write(`data: ${JSON.stringify({ error: "An error occurred" })}\n\n`);
+        res.write(
+            `data: ${JSON.stringify({ error: "An error occurred" })}\n\n`
+        );
     }
 
     res.end();
-}
+};
+export default rateLimitMiddleware(handler);

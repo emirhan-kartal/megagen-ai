@@ -9,14 +9,14 @@ export function AiChatbot() {
         { role: "assistant", content: "Merhaba. Nasıl yardımcı olabilirim?" },
     ]);
     const [text, setText] = useState("");
-    console.log(text)
+    console.log(text);
     const [input, setInput] = useState("");
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const prewrittenPrompts: string[] = [
-        "Siparişimin teslim süresi ne kadar?",
-        "Ürünlerin garanti süresi ne kadar?",
-        "Bir tasarım uzmanı ile nasıl randevu alabilirim?",
+        "AnyRidge implantları kimler için uygundur?",
+        "AnyRidge implantları hangi durumlarda kullanılabilir?",
+        "AnyRidge implantlarının bakımı nasıl yapılmalıdır?",
     ];
 
     const scrollToBottom = () => {
@@ -42,9 +42,29 @@ export function AiChatbot() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    prompt: [...messages, { role: "user", content: "Is this prompt related to Megagen or its services? Prompt:" + prompt  + "\n If not, reply with 'I can not assist you with this.If yes, answer as usual.'" }],
+                    prompt: [
+                        ...messages,
+                        {
+                            role: "user",
+                            content:
+                                "If this prompt is related to Megagen or its services '" +
+                                prompt +
+                                "'\n respond that prompt.If this prompt is not related to Megagen or its services, please express that you can help only about Megagen to that prompt in the prompt's language.",
+                        },
+                    ],
                 }),
             });
+            if (response.status === 429) {
+                setMessages((prevMessages) => [
+                    ...prevMessages,
+                    {
+                        role: "assistant",
+                        content:
+                            "Özür dilerim, bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+                    },
+                ]);
+                return;
+            }
 
             if (!response.body) {
                 throw new Error("No response body");
@@ -104,11 +124,11 @@ export function AiChatbot() {
         <Card className="flex flex-col h-[600px] w-full max-w-md mx-auto">
             <CardHeader>
                 <CardTitle className="text-center text-2xl font-bold">
-                    Metaggio Asistan
+                    IMegagen Asistan
                 </CardTitle>
             </CardHeader>
             <CardContent className="flex-grow flex flex-col p-4 overflow-hidden">
-                <ScrollArea className="flex-grow pr-4" >
+                <ScrollArea className="flex-grow pr-4">
                     <div className="space-y-4">
                         {messages.map((message, index) => (
                             <div
