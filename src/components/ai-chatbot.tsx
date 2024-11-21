@@ -3,11 +3,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { compareWithAllMessages } from "@/lib/cosineSimilarity";
 
 export function AiChatbot() {
     const [messages, setMessages] = useState([
         { role: "assistant", content: "Merhaba. Nasıl yardımcı olabilirim?" },
     ]);
+    useEffect(() => {
+        const interval = setInterval(() => {
+            console.log(compareWithAllMessages("Ankara başkentimizdir"));
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
     const [text, setText] = useState("");
     console.log(text);
     const [input, setInput] = useState("");
@@ -46,10 +53,7 @@ export function AiChatbot() {
                         ...messages,
                         {
                             role: "user",
-                            content:
-                                "If this prompt is related to Megagen or its services '" +
-                                prompt +
-                                "'\n respond that prompt.If this prompt is not related to Megagen or its services, please express that you can help only about Megagen to that prompt in the prompt's language.",
+                            content: `You are an AI assistant designed exclusively to provide information about Megagen, its products, and its services. Do not respond to any questions or prompts that are unrelated to Megagen. If asked anything irrelevant, respond with: 'I can only provide information about Megagen and its offerings. Please ask questions related to Megagen. Prompt is: ${prompt}'`,
                         },
                     ],
                 }),
@@ -59,13 +63,11 @@ export function AiChatbot() {
                     ...prevMessages,
                     {
                         role: "assistant",
-                        content:
-                            "Özür dilerim, bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+                        content: "Rate limit exceeded. Please try again later.",
                     },
                 ]);
-                return;
+                return
             }
-
             if (!response.body) {
                 throw new Error("No response body");
             }
