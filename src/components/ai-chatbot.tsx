@@ -51,6 +51,7 @@ export function AiChatbot() {
                 body: JSON.stringify({
                     prompt: [
                         ...messages,
+                        {role:"system", content: "I can only provide information about Megagen and its offerings. Please ask questions related to Megagen."},
                         {
                             role: "user",
                             content: `You are an AI assistant designed exclusively to provide information about Megagen, its products, and its services. Do not respond to any questions or prompts that are unrelated to Megagen. If asked anything irrelevant, respond with: 'I can only provide information about Megagen and its offerings. Please ask questions related to Megagen.' in Prompt’s language Prompt is: ${prompt}`,

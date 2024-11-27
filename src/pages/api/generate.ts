@@ -20,7 +20,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                     Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
                 },
                 body: JSON.stringify({
-                    model: "ft:gpt-4o-mini-2024-07-18:personal::AVoaDKbW",
+                    model: "ft:gpt-4o-mini-2024-07-18:personal::AYL4ANrs",
                     messages: prompt,
                     stream: true,
                 }),
